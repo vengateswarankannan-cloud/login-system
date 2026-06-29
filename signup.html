@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="signup.css">
+    
+</head>
+<body>
+
+<div class="box">
+    <h2>Create Account</h2>
+
+    <form action="/register" method="POST">
+        <input type="text" name="name" placeholder="Full Name" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+
+        <button type="submit">Sign Up</button>
+    </form>
+
+    <p>
+        Already have account?
+    <a href="signin.html">Sign In</a>
+    </p>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    
+    const form = document.querySelector("form");
+
+    
+    form.addEventListener("submit", function (event) {
+
+        const name = document.querySelector('input[name="name"]').value.trim();
+        const email = document.querySelector('input[name="email"]').value.trim();
+        const password = document.querySelector('input[name="password"]').value.trim();
+        const confirmPassword = document.querySelector('input[name="confirm_password"]').value.trim();
+
+    
+        if (name === "") {
+            alert("Please enter your name.");
+            event.preventDefault();
+            return;
+        }
+
+        
+        if (email === "") {
+            alert("Please enter your email.");
+            event.preventDefault();
+            return;
+        }
+
+    
+        if (password.length < 6) {
+            alert("Password must be at least 6 characters.");
+            event.preventDefault();
+            return;
+        }
+
+        
+        if (password !== confirmPassword) {
+            alert("Passwords do not match.");
+            event.preventDefault();
+            return;
+        }
+
+        
+        alert("Signup form submitted successfully.");
+    });
+
+});</script>
+</body>
+</html>
