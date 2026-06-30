@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #36d1dc, #5b86e5);
+    }
+    .card {
+      width: 100%;
+      max-width: 380px;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, .2);
+      text-align: center;
+    }
+    h2 { margin-bottom: 20px; color: #222; }
+    .field { margin-bottom: 15px; text-align: left; }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+    }
+    input {
+      width: 100%;
+      padding: 11px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      outline: none;
+      font-size: 14px;
+      transition: .2s;
+    }
+    input:focus {
+      border-color: #5b86e5;
+      box-shadow: 0 0 0 3px rgba(91, 134, 229, .12);
+    }
+    input.valid { border-color: #18a558; }
+    input.invalid { border-color: #cc0000; }
+    small {
+      display: block;
+      margin-top: 5px;
+      min-height: 16px;
+      font-size: 12px;
+    }
+    .error {
+      display: none;
+      background: #ffe0e0;
+      color: #cc0000;
+      padding: 10px;
+      border-radius: 6px;
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+    .error.show { display: block; }
+    button {
+      width: 100%;
+      padding: 11px;
+      background: #5b86e5;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      margin-top: 5px;
+    }
+    button:hover { background: #3f6fd1; }
+    a { color: #5b86e5; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    p { margin-top: 18px; font-size: 14px; }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h2>Create Account</h2>
+    
+    <div class="error {% if error %}show{% endif %}" id="formError" role="alert" aria-live="polite">
+      {% if error %}{{ error }}{% endif %}
+    </div>
+
+    <form action="{{ url_for('signup') }}" method="POST" id="signupForm" novalidate>
+      <div class="field">
+        <label for="name">Full Name</label>
+        <input type="text" name="name" id="name" placeholder="Enter your name" autocomplete="name" required />
+        <small id="nameHint"></small>
+      </div>
+
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email" placeholder="Enter your email" autocomplete="username" required />
+        <small id="emailHint"></small>
+      </div>
+
+      <div class="field">
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" placeholder="Create password" autocomplete="new-password" minlength="6" required />
+        <small id="passwordHint"></small>
+      </div>
+
+      <div class="field">
+        <label for="confirm_password">Confirm Password</label>
+        <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm password" autocomplete="new-password" minlength="6" required />
+        <small id="confirmHint"></small>
+      </div>
+
+      <button type="submit">Sign Up</button>
+    </form>
+
+    <p>Already have an account?<p><a href="{{ url_for('signin') }}">Sign In</a></p>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const form = document.getElementById("signupForm");
+      const name = document.getElementById("name");
+      const email = document.getElementById("email");
+      const password = document.getElementById("password");
+      const confirmPassword = document.getElementById("confirm_password");
+      const nameHint = document.getElementById("nameHint");
+      const emailHint = document.getElementById("emailHint");
+      const passwordHint = document.getElementById("passwordHint");
+      const confirmHint = document.getElementById("confirmHint");
+      const formError = document.getElementById("formError");
+
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[A-Za-z]{2,}$/;
+
+      function showError(message) {
+        if (!formError) return;
+        formError.textContent = message;
+        formError.classList.add("show");
+      }
+
+      function clearError() {
+        if (!formError) return;
+        formError.textContent = "";
+        formError.classList.remove("show");
+      }
+
+      function setState(field, valid) {
+        field.classList.toggle("valid", valid);
+        field.classList.toggle("invalid", !valid);
+      }
+
+      name.addEventListener("input", function () {
+        const value = name.value.trim();
+        if (value.length === 0) {
+          nameHint.textContent = "";
+          name.classList.remove("valid", "invalid");
+          return;
+        }
+        if (value.length < 2) {
+          nameHint.textContent = "Please enter at least 2 characters.";
+          nameHint.style.color = "#cc0000";
+          setState(name, false);
+        } else {
+          nameHint.textContent = "";
+          setState(name, true);
+        }
+      });
+
+      email.addEventListener("input", function () {
+        const value = email.value.trim();
+        if (value.length === 0) {
+          emailHint.textContent = "";
+          email.classList.remove("valid", "invalid");
+          return;
+        }
+        if (!emailPattern.test(value)) {
+          emailHint.textContent = "Please enter a valid email address.";
+          emailHint.style.color = "#cc0000";
+          setState(email, false);
+        } else {
+          emailHint.textContent = "";
+          setState(email, true);
+        }
+      });
+
+      password.addEventListener("input", function () {
+        if (password.value.length === 0) {
+          passwordHint.textContent = "";
+          password.classList.remove("valid", "invalid");
+          return;
+        }
+        if (password.value.length < 6) {
+          passwordHint.textContent = "Password must be at least 6 characters.";
+          passwordHint.style.color = "#cc0000";
+          setState(password, false);
+        } else {
+          passwordHint.textContent = "";
+          setState(password, true);
+        }
+        if (confirmPassword.value) confirmPassword.dispatchEvent(new Event("input"));
+      });
+
+      confirmPassword.addEventListener("input", function () {
+        if (confirmPassword.value.length === 0) {
+          confirmHint.textContent = "";
+          confirmPassword.classList.remove("valid", "invalid");
+          return;
+        }
+        if (confirmPassword.value !== password.value) {
+          confirmHint.textContent = "Passwords do not match.";
+          confirmHint.style.color = "#cc0000";
+          setState(confirmPassword, false);
+        } else {
+          confirmHint.textContent = "Passwords match.";
+          confirmHint.style.color = "#18a558";
+          setState(confirmPassword, true);
+        }
+      });
+
+      form.addEventListener("submit", function (e) {
+        clearError();
+        if (name.value.trim().length < 2) { showError("Please enter your full name."); name.focus(); e.preventDefault(); return; }
+        if (!emailPattern.test(email.value.trim())) { showError("Please enter a valid email address."); email.focus(); e.preventDefault(); return; }
+        if (password.value.length < 6) { showError("Password must be at least 6 characters."); password.focus(); e.preventDefault(); return; }
+        if (password.value !== confirmPassword.value) { showError("Passwords do not match."); confirmPassword.focus(); e.preventDefault(); return; }
+      });
+    });
+  </script>
+</body>
+</html>

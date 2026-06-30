@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #36d1dc, #5b86e5);
+            color: #fff;
+        }
+        .card {
+            width: 380px;
+            background: rgba(255,255,255,0.12);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+            text-align: center;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        h1 { margin-bottom: 20px; }
+        p { margin-bottom: 30px; font-size: 16px; }
+        a {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #fff;
+            color: #5b86e5;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        a:hover {
+            background: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h1>Welcome, {{ name }}!</h1>
+    <p>You are successfully signed in.</p>
+    <a href="/logout">Logout</a>
+</div>
+</body>
+</html>
